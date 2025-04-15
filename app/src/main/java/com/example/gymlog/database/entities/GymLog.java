@@ -12,13 +12,13 @@ public class GymLog {
     private int id;
 
     private String exerciseName;
-    private int weight;
+    private double weight;
     private int reps;
     private Date date;
-    private int userId; // NEW FIELD
+    private int userId;
 
     // Constructor
-    public GymLog(String exerciseName, int weight, int reps, Date date, int userId) {
+    public GymLog(String exerciseName, double weight, int reps, Date date, int userId) {
         this.exerciseName = exerciseName;
         this.weight = weight;
         this.reps = reps;
@@ -35,7 +35,7 @@ public class GymLog {
         return exerciseName;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -60,7 +60,7 @@ public class GymLog {
         this.exerciseName = exerciseName;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 

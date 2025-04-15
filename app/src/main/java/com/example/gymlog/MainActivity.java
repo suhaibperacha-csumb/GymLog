@@ -2,10 +2,14 @@ package com.example.gymlog;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,11 +31,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Get USER_ID from Intent
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         Intent intent = getIntent();
         loggedInUserId = intent.getIntExtra("USER_ID", -1);
         if (loggedInUserId == -1) {
-            finish(); // invalid user, close activity
+            finish();
             return;
         }
 
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             String repsStr = repsInput.getText().toString().trim();
 
             if (!name.isEmpty() && !weightStr.isEmpty() && !repsStr.isEmpty()) {
-                int weight = Integer.parseInt(weightStr);
+                double weight = Double.parseDouble(weightStr);
                 int reps = Integer.parseInt(repsStr);
                 GymLog log = new GymLog(name, weight, reps, new Date(), loggedInUserId);
                 viewModel.insert(log);
@@ -63,5 +69,28 @@ public class MainActivity extends AppCompatActivity {
                 repsInput.setText("");
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_logout) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Logout")
+                    .setMessage("Are you sure you want to logout?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        startActivity(new Intent(this, LoginActivity.class));
+                        finish();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
